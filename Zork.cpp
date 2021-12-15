@@ -2,19 +2,43 @@
 //
 
 #include <iostream>
+#include <cstdlib>
+#include <string>
+using namespace std;
+
+void start(int& points, int& moves, string& direction, bool inventory[100]);
+void newRoom(int& points, int& moves, string& direction);
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    setlocale(LC_ALL, "");
+    bool inventory[100];
+    int points = 0, moves = 0;
+    string direction = "north";
+    start(points, moves, direction, inventory);
+
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void start(int& points, int& moves, string& direction, bool inventory[100])
+{
+    string input;
+    newRoom(points, moves, direction);
+    cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl << "There is a letter in front of you." << endl;
+    getline(cin, input);
+    if (input == "read letter") {
+        newRoom(points, moves, direction);
+        cout << "Zork is a text based adventure game." << endl << "Instructions:" << endl << "You type what you wanna do in the game, ex \"turn south\"or \"look\"";
+        start(points, moves, direction, inventory);
+    }
+    else if (input == "look")
+    {
+        newRoom(points, moves, direction);
+        cout << "You are in the hallway.";
+        start(points, moves, direction, inventory);
+    }
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+void printStat(int& points, int& moves, string& direction)
+{
+    cout << "Points: " << points << " Moves: " << moves << " Direction: " << direction << endl;
+}
