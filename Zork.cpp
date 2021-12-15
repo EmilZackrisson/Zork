@@ -113,11 +113,13 @@ void room2(int& keys, int& moves, bool inventory[100])
     else if (input == "open door right")
     {
         system("CLS");
+        moves++;
         room6(keys, moves, inventory);
     }
     else if (input == "open door behind")
     {
         system("CLS");
+        moves++;
         start(keys, moves, inventory);
     }
     else if (input == "talk to old man")
