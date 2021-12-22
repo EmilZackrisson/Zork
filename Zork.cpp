@@ -19,14 +19,51 @@ int main()
 	bool inv[10];
 	int keys = 0, moves = 0;
 	printStat(keys, moves);
-	cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl << ">";
+	cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
 	start(keys, moves, inv);
+
+	//Allows dev to jump to room
+	int devRoomTest = 6;
+	if (devRoomTest == 0) // Start room
+	{
+		start(keys, moves, inv);
+	}
+	if (devRoomTest == 1) // Room 1
+	{
+		room1(keys, moves, inv);
+	}
+	if (devRoomTest == 2) // Room 2
+	{
+		room2(keys, moves, inv);
+	}
+	if (devRoomTest == 3) // Room 3
+	{
+		room3(keys, moves, inv);
+	}
+	if (devRoomTest == 4) // Room 4
+	{
+		room4(keys, moves, inv);
+	}
+	if (devRoomTest == 5) // Room 5
+	{
+		room5(keys, moves, inv);
+	}
+	if (devRoomTest == 6) // Room 6
+	{
+		room6(keys, moves, inv);
+	}
+	else
+	{
+		cout << "devRoomTest invalid value";
+	}
+	
 }
 
 void start(int& keys, int& moves, bool inv[10])
 {
 	string input;
 	moves++;
+	cout<<"You're in the hallway." <<endl << ">";
 	getline(cin, input);
 
 	if (input == "read letter") {
@@ -48,12 +85,17 @@ void start(int& keys, int& moves, bool inv[10])
 		printStat(keys, moves);
 		start(keys, moves, inv);
 	}
-	else if (input == "open forward door")
+	else if (input == "open forward door") // Room 1 (Room to boss)
 	{
 		system("CLS");
 		room1(keys, moves, inv);
 	}
-	else if (input == "open right door")
+	else if (input == "open left door") // Room 4 (Goblin room)
+	{
+		system("CLS");
+		room4(keys, moves, inv);
+	}
+	else if (input == "open right door") //Room 2 (Riddle room)
 	{
 		system("CLS");
 		room2(keys, moves, inv);
@@ -70,7 +112,7 @@ void start(int& keys, int& moves, bool inv[10])
 	}
 }
 
-void printStat(int& keys, int& moves)
+void printStat(int& keys, int& moves) //Prints out the stats
 {
 	cout << endl << "Keys: " << keys << " Moves: " << moves << endl;
 }
@@ -262,7 +304,7 @@ void room5(int& keys, int& moves, bool inv[10])
 		cout << "There is a king with a blue torch." << endl;
 		room5(keys, moves, inv);
 	}
-	if (input == back)
+	if (input == "back")
 	{
 		system("CLS");
 		room3(keys, moves, inv);
@@ -272,6 +314,7 @@ void room5(int& keys, int& moves, bool inv[10])
 void room6(int& keys, int& moves, bool inv[10])
 {
 	//A chest with key from room 4 and the answer from room 2 and the color of torch
+
 }
 
 void roomBoss(int& keys, int& moves, bool inv[10])
