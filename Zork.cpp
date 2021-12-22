@@ -19,13 +19,13 @@ int main()
 	bool inv[10];
 	int keys = 0, moves = 0;
 	printStat(keys, moves);
-	cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
-	start(keys, moves, inv);
+	
 
-	//Allows dev to jump to room
+	//Allows dev to jump to room and get the right keys
 	int devRoomTest = 6;
 	if (devRoomTest == 0) // Start room
 	{
+		cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
 		start(keys, moves, inv);
 	}
 	if (devRoomTest == 1) // Room 1
@@ -48,8 +48,9 @@ int main()
 	{
 		room5(keys, moves, inv);
 	}
-	if (devRoomTest == 6) // Room 6
+	if (devRoomTest == 6) // Room 6 and get the first key
 	{
+		keys = 1;
 		room6(keys, moves, inv);
 	}
 	else
@@ -278,6 +279,11 @@ void room3(int& keys, int& moves, bool inv[10])
 void room4(int& keys, int& moves, bool inv[10])
 {
 	//Game against goblin
+	moves++;
+	printStat(keys, moves);
+	string input;
+	cout << "There is a goblin here." << endl;
+
 }
 
 void room5(int& keys, int& moves, bool inv[10])
@@ -314,7 +320,46 @@ void room5(int& keys, int& moves, bool inv[10])
 void room6(int& keys, int& moves, bool inv[10])
 {
 	//A chest with key from room 4 and the answer from room 2 and the color of torch
+	moves++;
+	printStat(keys, moves);
+	string input;
+	cout << "There is a chest." << endl;
+	getline(cin, input);
+	if (input == "look")
+	{
+		cout << "There is a chest." << endl;
+		room6(keys, moves, inv);
+	}
+	if (input == "help")
+	{
+		cout << "open chest, back";
+		room6(keys, moves, inv);
+	}
+	if (input == "open chest")
+	{
+		if (keys==1)
+		{
+			cout << "What was the color of the torch?" << endl;
+			getline(cin, input);
+			if (input == "blue")
+			{
+				cout << "Thats right, you got a key.";
+				keys++;
+				room6(keys, moves, inv);
+			}
+			else
+			{
+				cout << "Thats the wrong answer...";
+				room6(keys, moves, inv);
+			}
 
+		}
+		else
+		{
+			cout << "You need a key...";
+			room6(keys, moves, inv);
+		}
+	}
 }
 
 void roomBoss(int& keys, int& moves, bool inv[10])
