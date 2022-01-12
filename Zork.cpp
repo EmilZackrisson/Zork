@@ -22,7 +22,7 @@ int main()
 	
 
 	//Allows dev to jump to room and get the right keys
-	int devRoomTest = 4;
+	int devRoomTest = 2;
 	if (devRoomTest == 0) // Start room
 	{
 		cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
@@ -310,6 +310,11 @@ void room4(int& keys, int& moves, bool inv[10])
 			room4(keys, moves, inv);
 		}
 	}
+	if (input == "help")
+	{
+		cout << "talk to goblin, leave";
+		room4(keys, moves, inv);
+	}
 
 }
 
@@ -321,10 +326,67 @@ void goblinGame(int& keys, int& moves, bool inv[10])
 	string input;
 
 	srand(moves);
-	int playerRand = rand();
+	int playerRand = rand()%6+1;
 	srand(moves + 10);
-	int goblinRand = rand();
+	int goblinRand = rand()%6+1;
 
+	cout << "Roll dice?" << endl;
+	getline(cin, input);
+	if (input=="yes")
+	{
+		if (playerRand>goblinRand)
+		{
+			keys = 1;
+			cout << "You rolled a " << playerRand << " and the goblin rolled a " << goblinRand << endl << "YOU WON!" << endl;
+			cout << "I see.. You won.. I promised to give you the key, so here you have it.. NOW LEAVE!!!" << endl;
+			cout << "Leave?" << endl; 
+			getline(cin, input);
+			if (input=="yes")
+			{
+				start(keys, moves, inv);
+			}
+			else
+			{
+				start(keys, moves, inv);
+			}
+		}
+		if (goblinRand>playerRand)
+		{
+			cout << "You rolled a " << playerRand << " and the goblin rolled a " << goblinRand << endl << "You lost..." << endl;
+			cout << "HAHA! I WON! YOU DON'T GET THE KEY! BETTER LUCK NEXT TIME! NOT!!" << endl;
+			cout << "Try again?" << endl;
+			getline(cin, input);
+			if (input=="yes")
+			{
+				system("CLS");
+				goblinGame(keys, moves, inv);
+			}
+			else
+			{
+				room4(keys, moves, inv);
+			}
+		}
+		else
+		{
+			cout << "You rolled a " << playerRand << " and the goblin rolled a " << goblinRand << endl << "It's a tie." << endl;
+			cout << "Try again?" <<endl;
+			getline(cin, input);
+			if (input == "yes")
+			{
+				system("CLS");
+				goblinGame(keys, moves, inv);
+			}
+			else
+			{
+				room4(keys, moves, inv);
+			}
+		}
+	}
+	else
+	{	
+		system("CLS");
+		room4(keys, moves, inv);
+	}
 
 }
 
