@@ -13,6 +13,10 @@ void goblinGame(int& keys, int& moves, bool inv[10]);
 void room5(int& keys, int& moves, bool inv[10]);
 void room6(int& keys, int& moves, bool inv[10]);
 void roomBoss(int& keys, int& moves, bool inv[10]);
+void printHealth(int& bossHealth, int& playerHealth);
+void bossHit(int& bossHealth, int& playerHealth);
+void bossSwing(int& bossHealth, int& playerHealth);
+
 
 int main()
 {
@@ -22,7 +26,7 @@ int main()
 	
 
 	//Allows dev to jump to room and get the right keys
-	int devRoomTest = 2;
+	int devRoomTest = 0;
 	if (devRoomTest == 0) // Start room
 	{
 		cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
@@ -101,9 +105,14 @@ void start(int& keys, int& moves, bool inv[10])
 		system("CLS");
 		room2(keys, moves, inv);
 	}
+	else if (input == "open door behind") //Room 3
+	{
+		system("CLS");
+		room3(keys, moves, inv);
+	}
 	else if (input == "help")
 	{
-		cout << "look, read letter, open forward door, open right door" << endl;
+		cout << "look, read letter, open forward door, open right door, open left door, open door behind" << endl;
 		start(keys, moves, inv);
 	}
 	else
@@ -447,7 +456,8 @@ void room6(int& keys, int& moves, bool inv[10])
 			getline(cin, input);
 			if (input == "blue")
 			{
-				cout << "Thats right, you got a key.";
+				cout << "Thats right, you got a key and a sword.";
+				inv[1] = true;
 				keys++;
 				room6(keys, moves, inv);
 			}
@@ -469,4 +479,60 @@ void room6(int& keys, int& moves, bool inv[10])
 void roomBoss(int& keys, int& moves, bool inv[10])
 {
 	//Boss room
+	moves++;
+	int bossHealth = 100;
+	int playerHealth = 100;
+	string input, health;
+	printHealth(bossHealth, playerHealth);
+	cout << "You are in a room with a sleeping dragon." << endl << "Behind the dragon is a door." << endl;
+	cout << "You pull out your sword." << endl << "Hit the dragon?" << endl;
+	getline(cin, input);
+	if (input == "yes")
+	{
+		while (playerHealth && bossHealth > 0)
+		{
+			bossHit(bossHealth, playerHealth);
+			bossSwing(bossHealth, playerHealth);
+		}
+		
+		if (bossHealth <= 0)
+		{
+			cout << "You killed the dragon." << endl;
+		}
+		if (playerHealth <= 0)
+		{
+			cout << "You died...";
+		}
+
+	}
+	else
+	{
+		start(keys, moves, inv);
+	}
+
+}
+
+void printHealth(int& bossHealth, int& playerHealth)
+{
+	cout << "Your health= " << playerHealth << endl << "Dragon Health= " << bossHealth;
+}
+
+void bossHit(int& bossHealth, int& playerHealth) 
+{
+	cout << "You hit the dragon." << endl;
+	bossHealth = bossHealth - 30;
+	printHealth(bossHealth, playerHealth);
+
+}
+
+void bossSwing(int& bossHealth, int& playerHealth)
+{
+	string input;
+	cout << "The Dragon swings it tails and tries to hit you. Jump?" << endl;
+	getline(cin, input);
+	if (input == "no")
+	{
+		playerHealth = playerHealth - 40;
+	}
+	printHealth(bossHealth, playerHealth);
 }
