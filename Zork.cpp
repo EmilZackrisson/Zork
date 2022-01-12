@@ -9,6 +9,7 @@ void room1(int& keys, int& moves, bool inv[10]);
 void room2(int& keys, int& moves, bool inv[10]);
 void room3(int& keys, int& moves, bool inv[10]);
 void room4(int& keys, int& moves, bool inv[10]);
+void goblinGame(int& keys, int& moves, bool inv[10]);
 void room5(int& keys, int& moves, bool inv[10]);
 void room6(int& keys, int& moves, bool inv[10]);
 void roomBoss(int& keys, int& moves, bool inv[10]);
@@ -17,12 +18,11 @@ int main()
 {
 	setlocale(LC_ALL, "");
 	bool inv[10];
-	int keys = 0, moves = 0;
-	printStat(keys, moves);
+	int keys = 0, moves = 3;
 	
 
 	//Allows dev to jump to room and get the right keys
-	int devRoomTest = 6;
+	int devRoomTest = 4;
 	if (devRoomTest == 0) // Start room
 	{
 		cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
@@ -53,10 +53,10 @@ int main()
 		keys = 1;
 		room6(keys, moves, inv);
 	}
-	else
-	{
-		cout << "devRoomTest invalid value";
-	}
+	//else
+	//{
+		//cout << "devRoomTest invalid value";
+	//}
 	
 }
 
@@ -278,11 +278,53 @@ void room3(int& keys, int& moves, bool inv[10])
 
 void room4(int& keys, int& moves, bool inv[10])
 {
-	//Game against goblin
+	//Goblinroom
 	moves++;
 	printStat(keys, moves);
 	string input;
 	cout << "There is a goblin here." << endl;
+	getline(cin, input);
+	if (input=="talk to goblin")
+	{
+		moves++;
+		cout << "Greetings. I expect you are looking for a key, is that right?";
+		getline(cin, input);
+		if (input=="yes")
+		{
+			cout << "You and I will play a little game. If you roll a higher than me, you get the key. But if i get the higher number, I win and you don't get the key.\n Are you ready?";
+			getline(cin, input);
+			if (input=="yes")
+			{
+				system("CLS");
+				goblinGame(keys, moves, inv);
+			}
+			else
+			{
+				cout << "Then come back when you are ready to be beaten." << endl;
+				room4(keys, moves, inv);
+			}
+		}
+		else
+		{
+			cout << "Bye then.";
+			room4(keys, moves, inv);
+		}
+	}
+
+}
+
+void goblinGame(int& keys, int& moves, bool inv[10])
+{
+	//Game against goblin
+	moves++;
+	printStat(keys, moves);
+	string input;
+
+	srand(moves);
+	int playerRand = rand();
+	srand(moves + 10);
+	int goblinRand = rand();
+
 
 }
 
