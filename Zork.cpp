@@ -657,9 +657,6 @@ void escape()
 	{
 		cout << "You escaped. You beat the game. Congratulations." << endl << endl;
 		Sleep(5000);
-		cout << "Here's your reward.";
-		Sleep(2000);
-		ShellExecute(0, 0, L"https://www.youtube.com/watch?v=HIcSWuKMwOw", 0, 0, SW_SHOW);
 		exit(0);
 	}
 }
