@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <Windows.h>
+#include <conio.h>
+#include <shellapi.h>
 using namespace std;
 
 void start(int& keys, int& moves, bool inv[10]);
@@ -16,6 +19,8 @@ void roomBoss(int& keys, int& moves, bool inv[10]);
 void printHealth(int& bossHealth, int& playerHealth);
 void bossHit(int& bossHealth, int& playerHealth);
 void bossSwing(int& bossHealth, int& playerHealth);
+void escape();
+void gameover();
 
 
 int main()
@@ -26,7 +31,7 @@ int main()
 	
 
 	//Allows dev to jump to room and get the right keys
-	int devRoomTest = 0;
+	int devRoomTest = 0; // 0 As standard
 	if (devRoomTest == 0) // Start room
 	{
 		cout << "A monster has locked you in an abandoned house. You need to kill the monster to escape." << endl;
@@ -56,6 +61,10 @@ int main()
 	{
 		keys = 1;
 		room6(keys, moves, inv);
+	}
+	if (devRoomTest == 7) {
+		keys == 2;
+		roomBoss(keys, moves, inv);
 	}
 	//else
 	//{
@@ -136,7 +145,7 @@ void room1(int& keys, int& moves, bool inv[10])
 	getline(cin, input);
 	if (input == "open door")
 	{
-		if (inv[0] == true)
+		if (keys == 2)
 		{
 			system("CLS");
 			cout << "This is a boss room, are you sure you want to go in???" << endl;
@@ -157,7 +166,8 @@ void room1(int& keys, int& moves, bool inv[10])
 		{
 			cout << "The door is locked... You need to find a key.";
 			printStat(keys, moves);
-			start(keys, moves, inv);
+			room1(keys, moves, inv);
+			
 		}
 	}
 	else if (input == "back")
@@ -256,7 +266,7 @@ void room3(int& keys, int& moves, bool inv[10])
 	getline(cin, input);
 	if (input == "look")
 	{
-		cout << "There is a door in front of you. \n There is a door to your right. \n There is a door behind you.\n";
+		cout << "There is a door in front of you."<<endl<< "There is a door to your right." << endl << "There is a door behind you." << endl;
 		room3(keys, moves, inv);
 	}
 	if (input == "help")
@@ -266,7 +276,7 @@ void room3(int& keys, int& moves, bool inv[10])
 	}
 	if (input=="open door right")
 	{
-		//To room 5. Needs key from room 4.
+		//To room 5. Needs key from room 4 (goblin).
 		if (keys == 1)
 		{
 			system("CLS");
@@ -283,6 +293,16 @@ void room3(int& keys, int& moves, bool inv[10])
 		system("CLS");
 		room6(keys, moves, inv);
 	}
+	if (input == "back")
+	{
+		system("CLS");
+		start(keys, moves, inv);
+	}
+	else
+	{
+		cout << "I didn't understand that.." << endl;
+		room3(keys, moves, inv);
+	}
 }
 
 void room4(int& keys, int& moves, bool inv[10])
@@ -295,12 +315,19 @@ void room4(int& keys, int& moves, bool inv[10])
 	getline(cin, input);
 	if (input=="talk to goblin")
 	{
+		if (keys==1)
+		{
+			cout << "You already beat me. GO AWAY!";
+			_getch(); // Wait for keypress from user, gives error but thats normal.
+			system("CLS");
+			room4(keys, moves, inv);
+		}
 		moves++;
 		cout << "Greetings. I expect you are looking for a key, is that right?";
 		getline(cin, input);
 		if (input=="yes")
 		{
-			cout << "You and I will play a little game. If you roll a higher than me, you get the key. But if i get the higher number, I win and you don't get the key.\n Are you ready?";
+			cout << "You and I will play a little game. If you roll a higher than me, you get the key. But if i get the higher number, I win and you don't get the key." << endl << "Are you ready ? " << endl;
 			getline(cin, input);
 			if (input=="yes")
 			{
@@ -321,8 +348,13 @@ void room4(int& keys, int& moves, bool inv[10])
 	}
 	if (input == "help")
 	{
-		cout << "talk to goblin, leave";
+		cout << "talk to goblin, back";
 		room4(keys, moves, inv);
+	}
+	if (input == "back")
+	{
+		system("CLS");
+		start(keys, moves, inv);
 	}
 
 }
@@ -345,6 +377,7 @@ void goblinGame(int& keys, int& moves, bool inv[10])
 	{
 		if (playerRand>goblinRand)
 		{
+			
 			keys = 1;
 			cout << "You rolled a " << playerRand << " and the goblin rolled a " << goblinRand << endl << "YOU WON!" << endl;
 			cout << "I see.. You won.. I promised to give you the key, so here you have it.. NOW LEAVE!!!" << endl;
@@ -352,14 +385,14 @@ void goblinGame(int& keys, int& moves, bool inv[10])
 			getline(cin, input);
 			if (input=="yes")
 			{
-				start(keys, moves, inv);
+				room4(keys, moves, inv);
 			}
 			else
 			{
-				start(keys, moves, inv);
+				room4(keys, moves, inv);
 			}
 		}
-		if (goblinRand>playerRand)
+		if (playerRand<goblinRand)
 		{
 			cout << "You rolled a " << playerRand << " and the goblin rolled a " << goblinRand << endl << "You lost..." << endl;
 			cout << "HAHA! I WON! YOU DON'T GET THE KEY! BETTER LUCK NEXT TIME! NOT!!" << endl;
@@ -375,10 +408,24 @@ void goblinGame(int& keys, int& moves, bool inv[10])
 				room4(keys, moves, inv);
 			}
 		}
-		else
+		if (playerRand==goblinRand)
 		{
 			cout << "You rolled a " << playerRand << " and the goblin rolled a " << goblinRand << endl << "It's a tie." << endl;
-			cout << "Try again?" <<endl;
+			cout << "Try again?" << endl;
+			getline(cin, input);
+			if (input == "yes")
+			{
+				system("CLS");
+				goblinGame(keys, moves, inv);
+			}
+			else
+			{
+				room4(keys, moves, inv);
+			}
+		}
+		else
+		{
+			cout << "Error. Oh no! My game! It's broken!" << endl;
 			getline(cin, input);
 			if (input == "yes")
 			{
@@ -440,13 +487,22 @@ void room6(int& keys, int& moves, bool inv[10])
 	getline(cin, input);
 	if (input == "look")
 	{
-		cout << "There is a chest." << endl;
+		cout << "There is a chest. There is a door to your left." << endl;
 		room6(keys, moves, inv);
 	}
 	if (input == "help")
 	{
 		cout << "open chest, back";
 		room6(keys, moves, inv);
+	}
+	if (input == "open left door")
+	{
+		room2(keys, moves, inv);
+	}
+	if (input == "back")
+	{
+		system("CLS");
+		room3(keys, moves, inv);
 	}
 	if (input == "open chest")
 	{
@@ -456,10 +512,24 @@ void room6(int& keys, int& moves, bool inv[10])
 			getline(cin, input);
 			if (input == "blue")
 			{
-				cout << "Thats right, you got a key and a sword.";
-				inv[1] = true;
-				keys++;
-				room6(keys, moves, inv);
+				cout << "What was the answer to the old mans riddle?" << endl;
+				getline(cin, input);
+				if (input == "darkness")
+				{
+					cout << "Thats right, you got a key and a sword.";
+					inv[1] = true;
+					keys++;
+					room6(keys, moves, inv);
+				}
+				else
+				{
+					cout << "That was not right, go back to the man and remember the answer next time." << endl;
+					Sleep(1000);
+					system("CLS");
+					room6(keys, moves, inv);
+				}
+
+				
 			}
 			else
 			{
@@ -473,6 +543,11 @@ void room6(int& keys, int& moves, bool inv[10])
 			cout << "You need a key...";
 			room6(keys, moves, inv);
 		}
+	}
+	else
+	{
+		cout << "Hmm. I didn't understand." << endl;
+		room6(keys, moves, inv);
 	}
 }
 
@@ -489,10 +564,27 @@ void roomBoss(int& keys, int& moves, bool inv[10])
 	getline(cin, input);
 	if (input == "yes")
 	{
-		while (playerHealth && bossHealth > 0)
+		while ((playerHealth > 0) || (bossHealth > 0))
 		{
-			bossHit(bossHealth, playerHealth);
 			bossSwing(bossHealth, playerHealth);
+			if (playerHealth <= 0)
+			{
+				gameover();
+			}
+			Sleep(3000);
+			system("CLS");
+			printHealth(bossHealth, playerHealth);
+
+			bossHit(bossHealth, playerHealth);
+			if (bossHealth <= 0)
+			{
+				escape();
+			}
+			Sleep(3000);
+			system("CLS");
+			printHealth(bossHealth, playerHealth);
+			
+			
 		}
 		
 		if (bossHealth <= 0)
@@ -514,25 +606,66 @@ void roomBoss(int& keys, int& moves, bool inv[10])
 
 void printHealth(int& bossHealth, int& playerHealth)
 {
-	cout << "Your health= " << playerHealth << endl << "Dragon Health= " << bossHealth;
+	cout << "Your health= " << playerHealth << endl << "Dragon Health= " << bossHealth << endl << endl;
 }
 
 void bossHit(int& bossHealth, int& playerHealth) 
 {
-	cout << "You hit the dragon." << endl;
-	bossHealth = bossHealth - 30;
-	printHealth(bossHealth, playerHealth);
+	string input;
+	cout << "Hit the dragon?";
+	getline(cin, input);
+	if (input == "yes")
+	{
+		cout << "You hit the dragon." << endl;
+		bossHealth = bossHealth - 30;
+
+		if (bossHealth <= 0)
+		{
+			escape();
+		}
+		if (playerHealth <= 0) {
+			gameover();
+		}
+
+		
+	}
+	else
+	{
+
+	}
 
 }
 
 void bossSwing(int& bossHealth, int& playerHealth)
 {
 	string input;
-	cout << "The Dragon swings it tails and tries to hit you. Jump?" << endl;
+	cout << "The Dragon swings it tails and tries to hit you. Jump!" << endl;
 	getline(cin, input);
-	if (input == "no")
+	if (input != "jump")
 	{
 		playerHealth = playerHealth - 40;
 	}
-	printHealth(bossHealth, playerHealth);
+	
+}
+
+void escape()
+{
+	string input;
+	cout << "YOU KILLED THE DRAGON! TRY TO ESCAPE!";
+	getline(cin, input);
+	if (input == "escape")
+	{
+		cout << "You escaped. You beat the game. Congratulations." << endl << endl;
+		Sleep(5000);
+		cout << "Here's your reward.";
+		Sleep(2000);
+		ShellExecute(0, 0, L"https://www.youtube.com/watch?v=HIcSWuKMwOw", 0, 0, SW_SHOW);
+		exit(0);
+	}
+}
+
+void gameover()
+{
+	cout << "Game Over! You died.";
+	exit(0);
 }
