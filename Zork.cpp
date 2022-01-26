@@ -69,7 +69,7 @@ int main()
 		room6(keys, moves, inv);
 	}
 	if (devRoomTest == 7) {
-		keys == 2;
+		keys = 2;
 		roomBoss(keys, moves, inv);
 	}
 	if (devRoomTest == 8) {
@@ -161,7 +161,7 @@ void room1(int& keys, int& moves, bool inv[10])
 		{
 			system("CLS");
 			print("There is a sign on the door.");
-			print("Dragon Room");
+			print("\"Dragon Room\"");
 			print("That sounds scary, should I go in anyway?");
 			string input;
 			getline(cin, input);
@@ -409,7 +409,7 @@ void goblinGame(int& keys, int& moves, bool inv[10])
 			else
 			{
 				print("You got kicked out.");
-				_getch;
+				_getch();
 				room4(keys, moves, inv);
 			}
 		}
@@ -552,7 +552,7 @@ void room6(int& keys, int& moves, bool inv[10])
 				else
 				{
 					print("That was not right, go back to the man and remember the answer next time.");
-					_getch;
+					_getch();
 					system("CLS");
 					room6(keys, moves, inv);
 				}
