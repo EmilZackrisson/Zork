@@ -1,9 +1,4 @@
 /*
-	Inv:
-	inv[0]: Needs to open chest in room 6. Players gets it from Goblin
-	inv[1]: Needs to open boss door. Player gets it from Chest in room 6.
-	inv[2]: Sword to fight boss. Player gets it from Chest in room 6.
-
 
 	Made by Emil Zackrisson
 
@@ -18,28 +13,33 @@
 #include <time.h> 
 using namespace std;
 
-void start(int& moves, bool inv[3]);
-void printStat(int& moves, bool inv[3]);
-void room1(int& moves, bool inv[3]);
-void room2(int& moves, bool inv[3]);
-void room3(int& moves, bool inv[3]);
-void room4(int& moves, bool inv[3]);
-void goblinGame(int& moves, bool inv[3]);
-void room5(int& moves, bool inv[3]);
-void room6(int& moves, bool inv[3]);
-void roomBoss(int& moves, bool inv[3]);
-void printHealth(int& bossHealth, int& playerHealth);
-void bossHit(int& bossHealth, int& playerHealth);
-void bossSwing(int& bossHealth, int& playerHealth);
-void escape();
-void gameover();
-void print(string text);
+void start(int& moves, bool inv[3]); // Default start point
+void printStat(int& moves, bool inv[3]); // Prints Moves and keys
+void room1(int& moves, bool inv[3]); // Room with door to boss
+void room2(int& moves, bool inv[3]); // Old man riddle
+void room3(int& moves, bool inv[3]); // Doors to room4 & 6
+void room4(int& moves, bool inv[3]); // Goblin room
+void goblinGame(int& moves, bool inv[3]); // Dice game against Goblin
+void room5(int& moves, bool inv[3]); // Painting with king
+void room6(int& moves, bool inv[3]); // Chest room
+void roomBoss(int& moves, bool inv[3]); // Boss Room
+void printHealth(int& bossHealth, int& playerHealth); //Prints health of player and boss
+void bossHit(int& bossHealth, int& playerHealth); // Player hits boss
+void bossSwing(int& bossHealth, int& playerHealth); // Boss tries to hit player
+void escape(); // Escape boss room
+void gameover(); // Gameover, player died
+void print(string text); // Skriver bara ut text fränt
 
 
 int main()
 {
 	setlocale(LC_ALL, "");
 	bool inv[3];
+	/*
+	inv[0]: Needs to open chest in room 6. Players gets it from Goblin
+	inv[1]: Needs to open boss door. Player gets it from Chest in room 6.
+	inv[2]: Sword to fight boss. Player gets it from Chest in room 6.
+	*/
 	int moves = 0;
 
 
@@ -86,7 +86,7 @@ int main()
 	else if (devRoomTest == 8) {
 		print("Hello World!");
 	}
-	else
+	else // If devRoomTest has an invald value
 	{
 		cout << "devRoomTest invalid value";
 		cout << "Check the value and try again.";
@@ -168,7 +168,7 @@ void printStat(int& moves, bool inv[3]) //Prints out the stats
 	cout << endl << "Keys: " << keys << " Moves: " << moves << endl;
 }
 
-void room1(int& moves, bool inv[3])
+void room1(int& moves, bool inv[3]) // Room with door to boss room
 {
 	moves++;
 	printStat(moves, inv);
@@ -308,12 +308,12 @@ void room3(int& moves, bool inv[3])
 		print("There is a door behind me.");
 		room3(moves, inv);
 	}
-	if (input == "help")
+	else if (input == "help")
 	{
 		print("look, open right door, open forward door, back");
 		room3(moves, inv);
 	}
-	if (input == "open right door")
+	else if (input == "open right door")
 	{
 		//To room 5. Needs key from room 4 (goblin).
 		if (inv[0] == true)
@@ -327,12 +327,12 @@ void room3(int& moves, bool inv[3])
 			room3(moves, inv);
 		}
 	}
-	if (input == "open forward door")
+	else if (input == "open forward door")
 	{
 		system("CLS");
 		room6(moves, inv);
 	}
-	if (input == "back")
+	else if (input == "back")
 	{
 		system("CLS");
 		start(moves, inv);
@@ -389,15 +389,20 @@ void room4(int& moves, bool inv[3])
 			room4(moves, inv);
 		}
 	}
-	if (input == "help")
+	else if (input == "help")
 	{
 		print("talk to goblin, back");
 		room4(moves, inv);
 	}
-	if (input == "back")
+	else if (input == "back")
 	{
 		system("CLS");
 		start(moves, inv);
+	}
+	else
+	{
+		print("I didn't understand that..");
+		room4(moves, inv);
 	}
 
 }
@@ -444,7 +449,7 @@ void goblinGame(int& moves, bool inv[3])
 				room4(moves, inv);
 			}
 		}
-		if (playerRand < goblinRand)
+		else if (playerRand < goblinRand)
 		{
 			string print_text;
 			print_text = "I rolled a " + to_string(playerRand) + " and the goblin rolled a " + to_string(goblinRand);
@@ -465,7 +470,7 @@ void goblinGame(int& moves, bool inv[3])
 				room4(moves, inv);
 			}
 		}
-		if (playerRand == goblinRand)
+		else if (playerRand == goblinRand)
 		{
 			string print_text;
 			print_text = "I rolled a " + to_string(playerRand) + " and the goblin rolled a " + to_string(goblinRand);
@@ -523,20 +528,25 @@ void room5(int& moves, bool inv[3])
 		print("There is a painting on the wall.");
 		room5(moves, inv);
 	}
-	if (input == "help")
+	else if (input == "help")
 	{
 		print("look, look at painting, back");
 		room5(moves, inv);
 	}
-	if (input == "look at painting")
+	else if (input == "look at painting")
 	{
 		print("There is a king with a blue torch.");
 		room5(moves, inv);
 	}
-	if (input == "back")
+	else if (input == "back")
 	{
 		system("CLS");
 		room3(moves, inv);
+	}
+	else
+	{
+		print("I didn't understand that..");
+		room5(moves, inv);
 	}
 }
 
@@ -554,21 +564,21 @@ void room6(int& moves, bool inv[3])
 		print("There is a chest. There is a door to the left.");
 		room6(moves, inv);
 	}
-	if (input == "help")
+	else if (input == "help")
 	{
 		print("open chest, back");
 		room6(moves, inv);
 	}
-	if (input == "open left door")
+	else if (input == "open left door")
 	{
 		room2(moves, inv);
 	}
-	if (input == "back")
+	else if (input == "back")
 	{
 		system("CLS");
 		room3(moves, inv);
 	}
-	if (input == "open chest")
+	else if (input == "open chest")
 	{
 		if (inv[0] = true)
 		{
@@ -689,11 +699,11 @@ void bossHit(int& bossHealth, int& playerHealth)
 		print("You hit the dragon.");
 		bossHealth = bossHealth - 30;
 
-		if (bossHealth <= 0)
+		if (bossHealth <= 0) // Boss Killed
 		{
-			escape();
+			escape(); 
 		}
-		if (playerHealth <= 0) {
+		if (playerHealth <= 0) { // Player Died
 			gameover();
 		}
 
@@ -701,7 +711,7 @@ void bossHit(int& bossHealth, int& playerHealth)
 	}
 	else
 	{
-
+		// Does nothing, just goes back to fight.
 	}
 
 }
