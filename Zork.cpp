@@ -758,4 +758,3 @@ void print(string text)
 	}
 	cout << endl;
 }
-
